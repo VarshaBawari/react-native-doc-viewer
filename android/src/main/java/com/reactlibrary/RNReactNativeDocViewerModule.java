@@ -64,12 +64,14 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
   public void openDoc(ReadableArray args, Callback callback) {
       final ReadableMap arg_object = args.getMap(0);
       try {
-        if (arg_object.getString("url") != null && arg_object.getString("fileName") != null) {
+        if (arg_object.getString("url") != null && arg_object.getString("fileName") != null && arg_object.getString("extension") != null) {
             // parameter parsing
             final String url = arg_object.getString("url");
             final String fileName =arg_object.getString("fileName");
+            final String extension =arg_object.getString("extension");
+
             // Begin the Download Task
-            new FileDownloaderAsyncTask(callback, url, fileName).execute();
+            new FileDownloaderAsyncTask(callback, url, fileName,extension).execute();
         }else{
             callback.invoke(false);
         }
@@ -106,7 +108,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
      * @param url
      * @return
      */
-    private File downloadFile(String url, Callback callback) {
+    private File downloadFile(String url,String extension, Callback callback) {
 
         try {
             // get an instance of a cookie manager since it has access to our
@@ -127,8 +129,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
 
             InputStream reader = conn.getInputStream();
 
-            String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-            System.out.println("varsha: " + extension);
+//            String extension = MimeTypeMap.getFileExtensionFromUrl(url);
             if (extension.equals("")) {
                 extension = "pdf";
                 System.out.println("extension (default): " + extension);
@@ -194,23 +195,43 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
         return mimeType;
     }
 
+    private static String getMimeTypeFromExtension(String extension) {
+        String mimeType = null;
+
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            mimeType = mime.getMimeTypeFromExtension(extension);
+        }
+
+        System.out.println("Mime Type: " + mimeType);
+
+        if (mimeType == null) {
+            mimeType = "application/pdf";
+            System.out.println("Mime Type (default): " + mimeType);
+        }
+
+        return mimeType;
+    }
+
   private class FileDownloaderAsyncTask extends AsyncTask<Void, Void, File> {
         private final Callback callback;
         private final String url;
         private final String fileName;
+        private final String extension;
 
         public FileDownloaderAsyncTask(Callback callback,
-                String url, String fileName) {
+                String url, String fileName,String extension) {
             super();
             this.callback = callback;
             this.url = url;
             this.fileName = fileName;
+            this.extension = extension;
         }
 
         @Override
         protected File doInBackground(Void... arg0) {
             if (!url.startsWith("file://")) {
-                return downloadFile(url, callback);
+                return downloadFile(url,extension, callback);
             } else {
                 File file = new File(url.replace("file://", ""));
                 return file;
@@ -227,7 +248,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             Context context = getCurrentActivity();
 
             // mime type of file data
-            String mimeType = getMimeType(url);
+            String mimeType = getMimeTypeFromExtension(extension);
             if (mimeType == null || context == null) {
                 return;
             }
