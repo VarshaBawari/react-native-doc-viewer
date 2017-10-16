@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <cache-path name="name" path="." />
+</paths><!-- From: file:/Users/Varsha/Documents/gitrepos/react-native-doc-viewer/android/src/main/res/xml/filepaths.xml --><!-- From: file:/Users/Varsha/Documents/gitrepos/react-native-doc-viewer/android/build/intermediates/bundles/debug/res/xml/filepaths.xml -->

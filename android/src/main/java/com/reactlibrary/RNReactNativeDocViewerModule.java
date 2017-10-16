@@ -128,6 +128,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             InputStream reader = conn.getInputStream();
 
             String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+            System.out.println("varsha: " + extension);
             if (extension.equals("")) {
                 extension = "pdf";
                 System.out.println("extension (default): " + extension);
