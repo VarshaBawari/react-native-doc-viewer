@@ -73,6 +73,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             // Begin the Download Task
             new FileDownloaderAsyncTask(callback, url, fileName,extension).execute();
         }else{
+            System
             callback.invoke(false);
         }
        } catch (Exception e) {
@@ -93,9 +94,11 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             // Begin the Download Task
             //new FileDownloaderAsyncTask(callback, url, fileName).execute();
         }else{
+            System.out.println("dalsdaskldsad");
             callback.invoke(false);
         }
        } catch (Exception e) {
+          System.out.println(e);
             callback.invoke(e.getMessage());
        }
   }
