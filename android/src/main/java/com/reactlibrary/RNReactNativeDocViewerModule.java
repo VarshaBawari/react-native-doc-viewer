@@ -73,7 +73,6 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             // Begin the Download Task
             new FileDownloaderAsyncTask(callback, url, fileName,extension).execute();
         }else{
-            System
             callback.invoke(false);
         }
        } catch (Exception e) {
